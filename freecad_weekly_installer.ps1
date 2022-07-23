@@ -99,8 +99,8 @@ nls 1
 #build config
 
 
-if (Test-Path "$Script_path\GW2start.ini") {
-	$conf = Get-IniContent "$Script_path\GW2start.ini"
+if (Test-Path "$Script_path\freecad_weekly_installer.ini") {
+	$conf = Get-IniContent "$Script_path\freecad_weekly_installer.ini"
 } else {
 	$conf = @{}
 	$conf.version = @{}	
