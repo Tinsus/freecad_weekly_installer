@@ -98,11 +98,12 @@ nls 1
 
 #build config
 
-$conf = @{}
-$conf.version = @{}
 
-if (Test-Path "$Script_path\freecad_weekly_installer.ini") {
-	$conf = Get-IniContent "$Script_path\freecad_weekly_installer.ini"
+if (Test-Path "$Script_path\GW2start.ini") {
+	$conf = Get-IniContent "$Script_path\GW2start.ini"
+} else {
+	$conf = @{}
+	$conf.version = @{}	
 }
 
 # check githubs API restrictions and waits until it's possible again
