@@ -157,59 +157,59 @@ $json.assets | foreach {
 	}
 }
 
-if (
-	($conf.version.Freecad -eq $null) -or
-	($conf.version.Freecad -ne $new) -or
-	(-not (Test-Path "$Script_path\FreeCAD\bin\freecad.exe"))
-) {
-	Write-Host "FreeCAD " -NoNewline -ForegroundColor White
-	Write-Host "gets an " -NoNewline
-	Write-Host "update" -ForegroundColor Green
+if ($download -eq 0) {
+	nls 5
+	Write-Host "No download for windows could be found." -ForegroundColor Red
+	nls 2
+	Write-Host "If this seems to be an error report it at: https://github.com/Tinsus/freecad_weekly_installer/issues" -ForegroundColor Yellow
 
-	if ($download -eq 0) {
-		nls 5
-		Write-Host "A major error occured - no download could been found." -ForegroundColor Red
-		nls 2
-		Write-Host "Please report this error at: https://github.com/Tinsus/freecad_weekly_installer/issues" -ForegroundColor Yellow
-
-		Start-Sleep -Seconds 3600
-		exit
-	}
-
-	#download FreeCAD
-	nls 1
-	Write-Host "Download is running. Please wait, until the Bytes downloaded reach " -NoNewline
-	Write-Host $size -ForegroundColor Yellow
-
-	Invoke-WebRequest $download -OutFile "$checkfile.7z"
-
-	Write-Host "Download finished" -ForegroundColor Green
-
-	#"installing" FreeCAD
-	nls 1
-	Write-Host "Extracting the downloaded files"
-
-	removefile "$Script_path\unzipped\"
-	removefile "$Script_path\FreeCAD\"
-	newdir "$Script_path\unzipped\"
-
-	Expand-7Zip -ArchiveFileName "$checkfile.7z" -TargetPath "$Script_path\unzipped\"
-
-	$child = $(gci "unzipped\" -Directory).Name
-
-	Move-Item "$Script_path\unzipped\$child" "$Script_path\FreeCAD"
-
-	removefile "$checkfile.7z"
-	removefile "$Script_path\unzipped\"
-	
-	Write-Host "Update finished" -ForegroundColor Green
-
-	$conf.version.Freecad = $new
-	Out-IniFile -InputObject $conf -FilePath "$Script_path\freecad_weekly_installer.ini"
+	Start-Sleep -Seconds 18
 } else {
-	Write-Host "FreeCAD " -NoNewline -ForegroundColor White
-	Write-Host "is " -NoNewline
-	Write-Host "up to date" -ForegroundColor White
+	if (
+		($conf.version.Freecad -eq $null) -or
+		($conf.version.Freecad -ne $new) -or
+		(-not (Test-Path "$Script_path\FreeCAD\bin\freecad.exe"))
+	) {
+		Write-Host "FreeCAD " -NoNewline -ForegroundColor White
+		Write-Host "gets an " -NoNewline
+		Write-Host "update" -ForegroundColor Green
+
+
+		#download FreeCAD
+		nls 1
+		Write-Host "Download is running. Please wait, until the Bytes downloaded reach " -NoNewline
+		Write-Host $size -ForegroundColor Yellow
+
+		Invoke-WebRequest $download -OutFile "$checkfile.7z"
+
+		Write-Host "Download finished" -ForegroundColor Green
+
+		#"installing" FreeCAD
+		nls 1
+		Write-Host "Extracting the downloaded files"
+
+		removefile "$Script_path\unzipped\"
+		removefile "$Script_path\FreeCAD\"
+		newdir "$Script_path\unzipped\"
+
+		Expand-7Zip -ArchiveFileName "$checkfile.7z" -TargetPath "$Script_path\unzipped\"
+
+		$child = $(gci "unzipped\" -Directory).Name
+
+		Move-Item "$Script_path\unzipped\$child" "$Script_path\FreeCAD"
+
+		removefile "$checkfile.7z"
+		removefile "$Script_path\unzipped\"
+		
+		Write-Host "Update finished" -ForegroundColor Green
+
+		$conf.version.Freecad = $new
+		Out-IniFile -InputObject $conf -FilePath "$Script_path\freecad_weekly_installer.ini"
+	} else {
+		Write-Host "FreeCAD " -NoNewline -ForegroundColor White
+		Write-Host "is " -NoNewline
+		Write-Host "up to date" -ForegroundColor White
+	}	
 }
 
 # done with updating
