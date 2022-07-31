@@ -139,8 +139,23 @@ $checkurl = "https://api.github.com/repos/FreeCAD/FreeCAD-Bundle/releases/tags/w
 Invoke-WebRequest "$checkurl" -OutFile "$checkfile"
 
 $json = (Get-Content "$checkfile" -Raw) | ConvertFrom-Json
-$new = $json.created_at
 removefile "$checkfile"
+
+$download = 0
+$size = 0
+$new = 0
+
+$json.assets | foreach {
+	if (
+		($_.browser_download_url -like "*windows*") -and
+		($_.browser_download_url -like "*.7z") -and
+		-not (($_.browser_download_url -like "*.txt"))
+	) {
+		$download = $_.browser_download_url
+		$size = $_.size
+		$new = $_.created_at
+	}
+}
 
 if (
 	($conf.version.Freecad -eq $null) -or
@@ -150,20 +165,6 @@ if (
 	Write-Host "FreeCAD " -NoNewline -ForegroundColor White
 	Write-Host "gets an " -NoNewline
 	Write-Host "update" -ForegroundColor Green
-
-	$download = 0
-	$size = 0
-
-	$json.assets | foreach {
-		if (
-			($_.browser_download_url -like "*windows*") -and
-			($_.browser_download_url -like "*.7z") -and
-			-not (($_.browser_download_url -like "*.txt"))
-		) {
-			$download = $_.browser_download_url
-			$size = $_.size
-		}
-	}
 
 	if ($download -eq 0) {
 		nls 5
