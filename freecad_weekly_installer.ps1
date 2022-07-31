@@ -163,7 +163,7 @@ if ($download -eq 0) {
 	nls 2
 	Write-Host "If this seems to be an error report it at: https://github.com/Tinsus/freecad_weekly_installer/issues" -ForegroundColor Yellow
 
-	Start-Sleep -Seconds 18
+	Start-Sleep -Seconds 2
 } else {
 	if (
 		($conf.version.Freecad -eq $null) -or
@@ -218,5 +218,5 @@ Start-Process -FilePath "$Script_path\FreeCAD\bin\freecad.exe" -WorkingDirectory
 nls 1
 Write-Host "I have other stuff to do"
 
-Start-Sleep -Seconds 2
+Start-Sleep -Seconds 18
 exit
