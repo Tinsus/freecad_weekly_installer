@@ -1,3 +1,5 @@
 /checkfile*
 /FreeCAD/*
 /freecad_weekly_installer.ini
+
+*.7z

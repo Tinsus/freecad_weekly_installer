@@ -174,7 +174,6 @@ if ($download -eq 0) {
 		Write-Host "gets an " -NoNewline
 		Write-Host "update" -ForegroundColor Green
 
-
 		#download FreeCAD
 		nls 1
 		Write-Host "Download is running. Please wait, until the Bytes downloaded reach " -NoNewline
@@ -198,7 +197,7 @@ if ($download -eq 0) {
 
 		Move-Item "$Script_path\unzipped\$child" "$Script_path\FreeCAD"
 
-		removefile "$checkfile.7z"
+		Move-Item "$checkfile.7z" "$Script_path\$new.7z"
 		removefile "$Script_path\unzipped\"
 		
 		Write-Host "Update finished" -ForegroundColor Green
