@@ -103,7 +103,7 @@ if (Test-Path "$Script_path\freecad_weekly_installer.ini") {
 	$conf = Get-IniContent "$Script_path\freecad_weekly_installer.ini"
 } else {
 	$conf = @{}
-	$conf.version = @{}	
+	$conf.version = @{}
 }
 
 # check githubs API restrictions and waits until it's possible again
@@ -197,9 +197,11 @@ if ($download -eq 0) {
 
 		Move-Item "$Script_path\unzipped\$child" "$Script_path\FreeCAD"
 
-		Move-Item "$checkfile.7z" "$Script_path\$new.7z"
+		$stamp = $new -replace ":", ""
+
+		Move-Item "$checkfile.7z" "$Script_path\$stamp.7z"
 		removefile "$Script_path\unzipped\"
-		
+
 		Write-Host "Update finished" -ForegroundColor Green
 
 		$conf.version.Freecad = $new
@@ -208,7 +210,7 @@ if ($download -eq 0) {
 		Write-Host "FreeCAD " -NoNewline -ForegroundColor White
 		Write-Host "is " -NoNewline
 		Write-Host "up to date" -ForegroundColor White
-	}	
+	}
 }
 
 # done with updating
